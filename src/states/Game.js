@@ -31,8 +31,13 @@ export default class extends Phaser.State {
             asset: 'car',
         });
 
-        this.game.add.existing(this.mushroom);
+        this.physics.startSystem(Phaser.Physics.P2JS);
+        /* this.game.add.existing(this.mushroom);*/
         this.game.add.existing(this.car);
+        this.car.initialize();
+        this.game.physics.p2.enable(this.car);
+
+
     }
 
     update () {
@@ -41,7 +46,7 @@ export default class extends Phaser.State {
 
     render () {
         if (__DEV__) {
-            this.game.debug.spriteInfo(this.mushroom, 32, 32)
+            this.game.debug.spriteInfo(this.car, 32, 32)
         }
     }
 }
