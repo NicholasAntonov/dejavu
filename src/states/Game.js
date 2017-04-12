@@ -2,7 +2,6 @@
 import Phaser from 'phaser'
 import Mushroom from '../sprites/Mushroom'
 import Car from '../sprites/Car'
-import {gameWidth, gameHeight} from '../config.js'
 
 export default class extends Phaser.State {
   init () {}
