@@ -5,6 +5,7 @@ export default class extends Phaser.Sprite {
         super(game, x, y, asset)
         this.anchor.setTo(0.5)
         this.velocity = 0;
+        this.turningSpeed = 8;
     }
 
     update () {
@@ -22,9 +23,9 @@ export default class extends Phaser.Sprite {
         this.body.velocity.y = this.velocity * Math.sin((this.angle-90)*0.01745);
 
         if (cursors.left.isDown)
-            this.body.angularVelocity = -5*(this.velocity/1000);
+            this.body.angularVelocity = -1 * this.turningSpeed * (this.velocity/1000);
         else if (cursors.right.isDown)
-            this.body.angularVelocity = 5*(this.velocity/1000);
+            this.body.angularVelocity = this.turningSpeed * (this.velocity/1000);
         else
             this.body.angularVelocity = 0;
 
