@@ -2,6 +2,7 @@
 import Phaser from 'phaser'
 import Mushroom from '../sprites/Mushroom'
 import Car from '../sprites/Car'
+import config from '../config'
 
 export default class extends Phaser.State {
     init () {}
@@ -17,7 +18,7 @@ export default class extends Phaser.State {
         banner.smoothed = false
         banner.anchor.setTo(0.5)
 
-        game.world.setBounds(0, 0, 3000, 3000);
+        game.world.setBounds(0, 0, config.worldWidth, config.worldHeight);
 
         this.mushroom = new Mushroom({
             game: this,
