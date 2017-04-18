@@ -2,6 +2,7 @@
 import Phaser from 'phaser'
 import Mushroom from '../sprites/Mushroom'
 import Car from '../sprites/Car'
+import Road from '../sprites/Road'
 
 export default class extends Phaser.State {
     init () {}
@@ -22,20 +23,29 @@ export default class extends Phaser.State {
         this.mushroom = new Mushroom({
             game: this,
             x: this.world.centerX,
-            y: this.world.centerY,
+            y: this.game.height-40,
             asset: 'mushroom',
         });
 
         this.car = new Car({
             game: this,
             x: this.world.centerX,
-            y: this.world.centerY,
+            y: this.game.height-40,
             asset: 'car',
         });
 
+        this.road = new Road({
+            game: this,
+            x: this.world.centerX,
+            y: this.game.height - 40,
+            asset: 'roadtest',
+        });
+
         this.physics.startSystem(Phaser.Physics.P2JS);
-        /* this.game.add.existing(this.mushroom);*/
+        this.game.add.existing(this.road);
+        this.game.add.existing(this.mushroom);
         this.game.add.existing(this.car);
+        this.road.initialize();
         this.car.initialize();
     }
 
@@ -47,6 +57,7 @@ export default class extends Phaser.State {
     render () {
         if (__DEV__) {
             this.game.debug.spriteInfo(this.car, 32, 32)
+            this.game.debug.text(this.road.outline.toString(), 32, 10)
         }
     }
 }
