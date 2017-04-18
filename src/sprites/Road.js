@@ -3,18 +3,18 @@ import Phaser from 'phaser'
 export default class extends Phaser.Sprite {
     constructor ({ game, x, y, asset }) {
         super(game, x, y, asset);
-        this.pointsx = [0, 100, 0, -100, 0];
-        this.pointsy = [0, 300, 0, -200, -100];
+        this.pointsx = [-1200, -900, 50,  800,  600,  900,   700,   -200,  -300, -700, -600,  -800,  -1100, -1200, -1200];
+        this.pointsy = [-300,  300,  200, -100, -600, -1000, -1300, -1000, -300, -300, -1000, -1200, -1200, -700,  -300];
         this.outline = [];
     }
 
     initialize () {
-        this.game.physics.p2.enableBody(this, true);
-        this.body.mass = 0;
+        this.game.physics.p2.enable(this, true);
         this.body.static = true;
+        this.anchor.set(0);
         this.body.clearShapes();
         this.outline = this.generateRoadBoundaries();
-        this.body.addPolygon({removeCollinearPoints: 10}, this.outline);
+        var err = this.body.addPolygon({skipSimpleCheck: true, removeCollinearPoints: 0.1}, this.outline);
     }
 
     generateRoadBoundaries () {
@@ -26,7 +26,7 @@ export default class extends Phaser.Sprite {
         /// this.points = readMapData("filename");
         /// this.pointsx = this.points x values;
         /// this.pointsy = this.points y values;
-        
+
         // In order to get a decent distribution of sample points, we need
         //   to find the distance of the track
         var distance = 0;
@@ -38,8 +38,8 @@ export default class extends Phaser.Sprite {
             distance += this.game.math.distance(x, y, nx, ny);
         }
 
-        const DISTANCE_BETWEEN_SAMPLES = 10; // Measured in pixels
-        const ROAD_WIDTH_FROM_CENTER = 75;   // Measured in pixels
+        const DISTANCE_BETWEEN_SAMPLES = 70; // Measured in pixels
+        const ROAD_WIDTH_FROM_CENTER = 100;   // Measured in pixels
 
         const STEP = 1/(distance/DISTANCE_BETWEEN_SAMPLES);
         const DELTA = STEP/10;
@@ -63,10 +63,10 @@ export default class extends Phaser.Sprite {
 
             var inv_vec = new Phaser.Point(-dy, dx);
             inv_vec.normalize()
-                   .multiply(ROAD_WIDTH_FROM_CENTER, ROAD_WIDTH_FROM_CENTER);
+                .multiply(ROAD_WIDTH_FROM_CENTER, ROAD_WIDTH_FROM_CENTER);
             leftx = x + inv_vec.x;
             lefty = y + inv_vec.y;
-            
+
             inv_vec.multiply(-1,-1);
             rightx = x + inv_vec.x;
             righty = y + inv_vec.y;
@@ -74,6 +74,14 @@ export default class extends Phaser.Sprite {
             // Splice the points into the middle of the array
             polygon.splice(polygon.length/2, 0, leftx, lefty, rightx, righty);
         }
+
+        // Add on the initial coordinates to create a closed loop
+        var leftx = polygon[0];
+        var lefty = polygon[1];
+        var rightx = polygon[polygon.length - 2];
+        var righty = polygon[polygon.length - 1];
+        polygon.splice(polygon.length/2, 0, leftx, lefty, rightx, righty);
+
         return polygon;
     }
 

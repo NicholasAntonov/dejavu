@@ -37,7 +37,7 @@ export default class extends Phaser.State {
         this.road = new Road({
             game: this,
             x: this.world.centerX,
-            y: this.game.height - 40,
+            y: this.world.centerY,
             asset: 'roadtest',
         });
 
@@ -57,7 +57,6 @@ export default class extends Phaser.State {
     render () {
         if (__DEV__) {
             this.game.debug.spriteInfo(this.car, 32, 32)
-            this.game.debug.text(this.road.outline.toString(), 32, 10)
         }
     }
 }
