@@ -27,18 +27,21 @@ export default class extends Phaser.State {
             asset: 'mushroom',
         });
 
-        this.car = new Car({
-            game: this,
-            x: this.world.centerX,
-            y: this.game.height-40,
-            asset: 'car',
-        });
-
         this.road = new Road({
             game: this,
             x: this.world.centerX,
             y: this.world.centerY,
             asset: 'roadtest',
+        });
+
+        var startpoint = this.road.getPointOnTrack(0);
+        console.log(startpoint);
+
+        this.car = new Car({
+            game: this,
+            x: startpoint.x,
+            y: startpoint.y,
+            asset: 'car',
         });
 
         this.physics.startSystem(Phaser.Physics.P2JS);
@@ -47,6 +50,8 @@ export default class extends Phaser.State {
         this.game.add.existing(this.car);
         this.road.initialize();
         this.car.initialize();
+
+        this.car.body.rotation = startpoint.a;
     }
 
     update () {
