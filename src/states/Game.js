@@ -35,7 +35,6 @@ export default class extends Phaser.State {
         });
 
         var startpoint = this.road.getPointOnTrack(0);
-        console.log(startpoint);
 
         this.car = new Car({
             game: this,

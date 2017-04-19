@@ -40,7 +40,6 @@ export default class extends Phaser.Sprite {
         var dx = this.game.math.catmullRomInterpolation(pointsx, percent+0.001) - xpos;
         var dy = this.game.math.catmullRomInterpolation(pointsy, percent+0.001) - ypos;
         var angle = Math.atan(dy/dx) + Math.PI/2;
-        console.log(dx, dy);
 
         xpos += this.x;
         ypos += this.y;
