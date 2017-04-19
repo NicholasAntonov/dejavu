@@ -23,11 +23,29 @@ export default class extends Phaser.Sprite {
     }
 
     getXCoordinates () {
-        return this.mapnodes.map( c=> c[0] );
+        return this.mapnodes.map( c => c[0] );
     }
 
     getYCoordinates () {
-        return this.mapnodes.map( c=> c[1] );
+        return this.mapnodes.map( c => c[1] );
+    }
+
+    getPointOnTrack ( percent ) {
+        var pointsx = this.getXCoordinates();
+        var pointsy = this.getYCoordinates();
+
+        var xpos = this.game.math.catmullRomInterpolation(pointsx, percent);
+        var ypos = this.game.math.catmullRomInterpolation(pointsy, percent);
+
+        var dx = this.game.math.catmullRomInterpolation(pointsx, percent+0.001) - xpos;
+        var dy = this.game.math.catmullRomInterpolation(pointsy, percent+0.001) - ypos;
+        var angle = Math.atan(dy/dx) + Math.PI/2;
+        console.log(dx, dy);
+
+        xpos += this.x;
+        ypos += this.y;
+
+        return {x: xpos, y: ypos, a: angle};
     }
 
     generateRoadBoundaries () {
