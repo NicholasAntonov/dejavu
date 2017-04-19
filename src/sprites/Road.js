@@ -3,8 +3,11 @@ import Phaser from 'phaser'
 export default class extends Phaser.Sprite {
     constructor ({ game, x, y, asset }) {
         super(game, x, y, asset);
-        this.pointsx = [-1200, -900, 50,  800,  600,  900,   700,   -200,  -300, -700, -600,  -800,  -1100, -1200, -1200];
-        this.pointsy = [-300,  300,  200, -100, -600, -1000, -1300, -1000, -300, -300, -1000, -1200, -1200, -700,  -300];
+        this.mapnodes = [ [-1200,-300], [-900,300], [50,200], [800,-100],
+                          [600,-600], [900,-1000], [700,-1300], [-200,-1000],
+                          [-300,-300], [-700,-300], [-600,-1000], [-800,-1200],
+                          [-1100,-1200], [-1200,-700], [-1200,-300]
+        ]
         this.outline = [];
     }
 
@@ -13,28 +16,24 @@ export default class extends Phaser.Sprite {
         this.body.static = true;
         this.anchor.set(0);
         this.body.clearShapes();
-        this.outline = this.generateRoadBoundaries();
+        this.outline = this.generateRoadBoundaries(this.mapnodes);
         var err = this.body.addPolygon({skipSimpleCheck: true, removeCollinearPoints: 0.1}, this.outline);
+        this.body.setCollisionGroup(this.game.physics.p2.nothingCollisionGroup);
     }
 
-    generateRoadBoundaries () {
-        // Read X and Y coordinates of the corners
+    generateRoadBoundaries (mapcoords) {
         // At certain (uniform) points along the Catmull Rom curve of these points,
         //   - Find the current slope of curve
         //   - Generate collision points perpendicular to this slope 
 
-        /// this.points = readMapData("filename");
-        /// this.pointsx = this.points x values;
-        /// this.pointsy = this.points y values;
-
         // In order to get a decent distribution of sample points, we need
         //   to find the distance of the track
         var distance = 0;
-        for ( var i = 0; i < this.pointsx.length - 1; i++ ) {
-            var x = this.pointsx[i];
-            var y = this.pointsy[i];
-            var nx = this.pointsx[i+1];
-            var ny = this.pointsy[i+1];
+        for ( var i = 0; i < mapcoords.length - 1; i++ ) {
+            var x = mapcoords[i][0];
+            var y = mapcoords[i][1];
+            var nx = mapcoords[i+1][0];
+            var ny = mapcoords[i+1][1];
             distance += this.game.math.distance(x, y, nx, ny);
         }
 
@@ -44,6 +43,8 @@ export default class extends Phaser.Sprite {
         const STEP = 1/(distance/DISTANCE_BETWEEN_SAMPLES);
         const DELTA = STEP/10;
 
+        var pointsx = mapcoords.map( c => c[0] );
+        var pointsy = mapcoords.map( c => c[1] );
         var polygon = [];
         for ( var j = 0; j < 1; j += STEP ) {
             var leftx = 0;
@@ -51,14 +52,14 @@ export default class extends Phaser.Sprite {
             var rightx = 0;
             var righty = 0;
 
-            var plusx  = this.game.math.catmullRomInterpolation(this.pointsx, j+DELTA);
-            var x      = this.game.math.catmullRomInterpolation(this.pointsx, j);
-            var minusx = this.game.math.catmullRomInterpolation(this.pointsx, j-DELTA);
+            var plusx  = this.game.math.catmullRomInterpolation(pointsx, j+DELTA);
+            var x      = this.game.math.catmullRomInterpolation(pointsx, j);
+            var minusx = this.game.math.catmullRomInterpolation(pointsx, j-DELTA);
             var dx = plusx - minusx;
 
-            var plusy  = this.game.math.catmullRomInterpolation(this.pointsy, j+DELTA);
-            var y      = this.game.math.catmullRomInterpolation(this.pointsy, j);
-            var minusy = this.game.math.catmullRomInterpolation(this.pointsy, j-DELTA);
+            var plusy  = this.game.math.catmullRomInterpolation(pointsy, j+DELTA);
+            var y      = this.game.math.catmullRomInterpolation(pointsy, j);
+            var minusy = this.game.math.catmullRomInterpolation(pointsy, j-DELTA);
             var dy = plusy - minusy;
 
             var inv_vec = new Phaser.Point(-dy, dx);
