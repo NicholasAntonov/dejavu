@@ -10,14 +10,16 @@ export default class extends Phaser.Sprite {
             [-1100,-1200], [-1200,-700], [-1200,-300]
         ]
         this.outline = [];
+        this.curvednodes = [];
+        this.visual = null;
     }
 
     initialize () {
-        this.game.physics.p2.enable(this, true);
+        this.game.physics.p2.enable(this, false);
         this.body.static = true;
         this.anchor.set(0);
         this.body.clearShapes();
-        this.outline = this.generateRoadBoundaries(this.mapnodes);
+        this.generateRoadBoundaries();
         var err = this.body.addPolygon({skipSimpleCheck: true, removeCollinearPoints: 0.1}, this.outline);
         this.body.setCollisionGroup(this.game.physics.p2.nothingCollisionGroup);
     }
@@ -71,7 +73,6 @@ export default class extends Phaser.Sprite {
 
         var pointsx = this.getXCoordinates();
         var pointsy = this.getYCoordinates();
-        var polygon = [];
         for ( var j = 0; j < 1; j += STEP ) {
             var leftx = 0;
             var lefty = 0;
@@ -99,17 +100,22 @@ export default class extends Phaser.Sprite {
             righty = y + inv_vec.y;
 
             // Splice the points into the middle of the array
-            polygon.splice(polygon.length/2, 0, leftx, lefty, rightx, righty);
+            this.outline.splice(this.outline.length/2, 0, leftx, lefty, rightx, righty);
+
+            // Add the current positional nodes to the curved map array
+            this.curvednodes.push(new Phaser.Point(x+this.x, y+this.y));
         }
 
         // Add on the initial coordinates to create a closed loop
-        var leftx = polygon[0];
-        var lefty = polygon[1];
-        var rightx = polygon[polygon.length - 2];
-        var righty = polygon[polygon.length - 1];
-        polygon.splice(polygon.length/2, 0, leftx, lefty, rightx, righty);
+        var leftx = this.outline[0];
+        var lefty = this.outline[1];
+        var rightx = this.outline[this.outline.length - 2];
+        var righty = this.outline[this.outline.length - 1];
 
-        return polygon;
+        this.outline.splice(this.outline.length/2, 0, leftx, lefty, rightx, righty);
+
+        var first = this.curvednodes[0];
+        this.curvednodes.push(new Phaser.Point(first.x, first.y));
     }
 
     update () {

@@ -36,7 +36,7 @@ export default class extends Phaser.Sprite {
     }
 
     initialize () {
-        this.game.physics.p2.enable(this, true);
+        this.game.physics.p2.enable(this, false);
         this.cursors = game.input.keyboard.createCursorKeys();
     }
 }
