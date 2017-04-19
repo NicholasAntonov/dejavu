@@ -21,7 +21,15 @@ export default class extends Phaser.Sprite {
         this.body.setCollisionGroup(this.game.physics.p2.nothingCollisionGroup);
     }
 
-    generateRoadBoundaries (mapcoords) {
+    getXCoordinates () {
+        return this.mapnodes.map( c=> c[0] );
+    }
+
+    getYCoordinates () {
+        return this.mapnodes.map( c=> c[1] );
+    }
+
+    generateRoadBoundaries () {
         // At certain (uniform) points along the Catmull Rom curve of these points,
         //   - Find the current slope of curve
         //   - Generate collision points perpendicular to this slope 
@@ -29,11 +37,11 @@ export default class extends Phaser.Sprite {
         // In order to get a decent distribution of sample points, we need
         //   to find the distance of the track
         var distance = 0;
-        for ( var i = 0; i < mapcoords.length - 1; i++ ) {
-            var x = mapcoords[i][0];
-            var y = mapcoords[i][1];
-            var nx = mapcoords[i+1][0];
-            var ny = mapcoords[i+1][1];
+        for ( var i = 0; i < this.mapnodes.length - 1; i++ ) {
+            var x = this.mapnodes[i][0];
+            var y = this.mapnodes[i][1];
+            var nx = this.mapnodes[i+1][0];
+            var ny = this.mapnodes[i+1][1];
             distance += this.game.math.distance(x, y, nx, ny);
         }
 
@@ -43,8 +51,8 @@ export default class extends Phaser.Sprite {
         const STEP = 1/(distance/DISTANCE_BETWEEN_SAMPLES);
         const DELTA = STEP/10;
 
-        var pointsx = mapcoords.map( c => c[0] );
-        var pointsy = mapcoords.map( c => c[1] );
+        var pointsx = this.getXCoordinates();
+        var pointsy = this.getYCoordinates();
         var polygon = [];
         for ( var j = 0; j < 1; j += STEP ) {
             var leftx = 0;
