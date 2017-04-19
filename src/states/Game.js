@@ -18,7 +18,7 @@ export default class extends Phaser.State {
         banner.smoothed = false
         banner.anchor.setTo(0.5)
 
-        game.world.setBounds(0, 0, 3000, 3000);
+        game.world.setBounds(0, 0, 5000, 5000);
 
         this.mushroom = new Mushroom({
             game: this,
