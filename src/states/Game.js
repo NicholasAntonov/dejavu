@@ -58,7 +58,7 @@ export default class extends Phaser.State {
                     this.startline.active = false;
                     this.midpoint.active = true;
                     this.lapcount += 1;
-                    this.timer += 18;
+                    this.timer += 15;
                     if (this.timer > 45) this.timer = 45;
                 }
             }
@@ -120,6 +120,14 @@ export default class extends Phaser.State {
         this.timertext.anchor.setTo(0.5);
         this.timertext.fixedToCamera = true;
         this.timertext.cameraOffset.setTo(this.game.width/2, 50);
+
+        this.laptext = game.add.text(200, 500, "test");
+        this.laptext.font = 'Dejavu Sans';
+        this.laptext.fontsize = 70;
+        this.laptext.fill = '#FFFFFF';
+        this.laptext.anchor.setTo(0);
+        this.laptext.fixedToCamera = true;
+        this.laptext.cameraOffset.setTo(20, this.game.height - 50);
     }
 
     update () {
@@ -127,6 +135,7 @@ export default class extends Phaser.State {
         game.camera.y = this.car.y - game.height/2 || game.camera.y;
         this.timer -= this.time.physicsElapsed;
         this.timertext.text = this.timer.toFixed(0);
+        this.laptext.text = "Lap: " + this.lapcount.toString();
         if (this.timer <= 0) {
             this.state.start('End');
         }
