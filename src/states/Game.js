@@ -2,6 +2,7 @@
 import Phaser from 'phaser'
 import Mushroom from '../sprites/Mushroom'
 import Car from '../sprites/Car'
+import Obstacle from '../sprites/Pickup'
 
 export default class extends Phaser.State {
     init () {}
@@ -33,8 +34,17 @@ export default class extends Phaser.State {
             asset: 'car',
         });
 
+        this.pakij = new Obstacle({
+            game: this,
+            x: this.car.x,
+            y: this.car.y - 200,
+            asset: 'jetbox',
+        });
+
         this.physics.startSystem(Phaser.Physics.P2JS);
         /* this.game.add.existing(this.mushroom);*/
+        this.game.add.existing(this.pakij);
+
         this.game.add.existing(this.car);
         this.car.initialize();
     }
