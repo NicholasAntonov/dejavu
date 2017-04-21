@@ -22,6 +22,8 @@ export default class extends Phaser.State {
         this.game.world.setBounds(0, 0, 5000, 5000);
         this.game.stage.backgroundColor = "#6F6F6F";
 
+        this.lapcount = 0;
+
         this.road = new Road({
             game: this,
             x: this.world.centerX,
@@ -53,6 +55,7 @@ export default class extends Phaser.State {
                     this.startline.passes += 1;
                     this.startline.active = false;
                     this.midpoint.active = true;
+                    this.lapcount += 1;
                 }
             }
         });
