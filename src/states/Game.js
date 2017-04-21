@@ -58,7 +58,7 @@ export default class extends Phaser.State {
                     this.startline.active = false;
                     this.midpoint.active = true;
                     this.lapcount += 1;
-                    this.timer += 15;
+                    this.timer += 12;
                     if (this.timer > 45) this.timer = 45;
                 }
             }

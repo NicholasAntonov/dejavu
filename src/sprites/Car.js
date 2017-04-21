@@ -14,9 +14,9 @@ export default class extends Phaser.Sprite {
     update () {
         var drifting = this.isDrifting();
 
-        if (this.cursors.up.isDown && this.targetvelocity <= 400) {
+        if (this.cursors.up.isDown && this.targetvelocity <= 600) {
             this.targetvelocity += 7;
-        } else if (this.cursors.down.isDown && this.targetvelocity >= -400) {
+        } else if (this.cursors.down.isDown && this.targetvelocity >= -600) {
             this.targetvelocity -= 7;
         } else {
             this.targetvelocity = increase(this.targetvelocity, -7);
@@ -34,9 +34,9 @@ export default class extends Phaser.Sprite {
             this.body.velocity.y += anglevec.y*0.04;
 
             if (this.cursors.left.isDown) {
-                this.body.angularVelocity = -1 * this.turningSpeed * (this.targetvelocity/1200);
+                this.body.angularVelocity = -1 * this.turningSpeed * (this.targetvelocity/2000);
             } else if (this.cursors.right.isDown) {
-                this.body.angularVelocity = this.turningSpeed * (this.targetvelocity/1200);
+                this.body.angularVelocity = this.turningSpeed * (this.targetvelocity/2000);
             } else {
                 this.body.angularVelocity = 0;
             }
@@ -92,8 +92,6 @@ export default class extends Phaser.Sprite {
         if (currentvec.getMagnitude() < 100) return false;
         currentvec.normalize();
 
-        var portion = anglevec.dot(currentvec);
-        if (portion < 0.9) return true;
-        else return false;
+        return true;
     }
 }
