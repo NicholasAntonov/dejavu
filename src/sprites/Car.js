@@ -1,4 +1,5 @@
 import Phaser from 'phaser'
+import FallingCar from './FallingCar'
 import { increase } from '../utils'
 
 export default class extends Phaser.Sprite {
@@ -31,6 +32,22 @@ export default class extends Phaser.Sprite {
             this.body.angularVelocity = this.turningSpeed * (this.velocity/1000);
         } else {
             this.body.angularVelocity = 0;
+        }
+
+        // Check if car is off the road
+        var bodies = this.game.physics.p2.hitTest(this.position, [this.game.road.body]);
+        if (bodies.length === 0) {
+            var fallingcar = new FallingCar({
+                game: this.game,
+                x: this.x,
+                y: this.y,
+                asset: 'car',
+            });
+            fallingcar.body.velocity.x = this.body.velocity.x;
+            fallingcar.body.velocity.y = this.body.velocity.y;
+            fallingcar.body.rotation = this.body.rotation;
+            this.game.add.existing(fallingcar);
+            this.destroy();
         }
 
     }

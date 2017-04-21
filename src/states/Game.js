@@ -24,6 +24,7 @@ export default class extends Phaser.State {
         this.game.stage.backgroundColor = "#6F6F6F";
 
         this.lapcount = 0;
+        this.timer = 30;
 
         this.road = new Road({
             game: this,
@@ -108,13 +109,13 @@ export default class extends Phaser.State {
     }
 
     update () {
-        this.game.camera.x = this.car.x - game.width/2;
-        this.game.camera.y = this.car.y - game.height/2;
+        this.game.camera.x = this.car.x - game.width/2 || this.game.camera.x;
+        this.game.camera.y = this.car.y - game.height/2 || this.game.camera.y;
     }
 
     render () {
         if (__DEV__) {
-            this.game.debug.spriteInfo(this.car, 32, 32);
+            //this.game.debug.spriteInfo(this.car, 32, 32);
         }
     }
 
@@ -126,8 +127,8 @@ export default class extends Phaser.State {
 
         do {
             var r = Math.random();
-            var rx = Math.random()*40 - 80;
-            var ry = Math.random()*40 - 80;
+            var rx = Math.random()*80 - 40;
+            var ry = Math.random()*80 - 40;
             var p = this.road.getPointOnTrack(r);
             validx = p.x + rx;
             validy = p.y + ry;
