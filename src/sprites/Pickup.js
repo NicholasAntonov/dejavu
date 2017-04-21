@@ -7,7 +7,7 @@ export default class extends Phaser.Sprite {
         this.height = 40;
         this.width = 40;
 
-        this.game.physics.p2.enable(this, true);
+        this.game.physics.p2.enable(this, false);
         this.body.setCircle(10);
         this.body.mass = 50;
         this.body.damping = 0.98;
