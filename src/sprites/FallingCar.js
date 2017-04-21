@@ -4,7 +4,8 @@ export default class extends Phaser.Sprite {
     constructor ({ game, x, y, asset }) {
         super(game, x, y, asset)
         this.game.physics.p2.enable(this, false);
-        this.body.setCollisionGroup(this.game.physics.p2.nothingCollisionGroup);
+        this.body.setCollisionGroup(this.game.game.roadCollisions); // Two games PogChamp
+        this.body.collides(this.game.game.roadCollisions);
         this.body.damping = 0.95;
     }
 

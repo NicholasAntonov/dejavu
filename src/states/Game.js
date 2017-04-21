@@ -12,7 +12,7 @@ export default class extends Phaser.State {
 
     create () {
         const bannerText = 'DejaVu'
-        let banner = this.add.text(this.world.centerX, this.game.height - 80, bannerText)
+        let banner = this.add.text(this.world.centerX, game.height - 80, bannerText)
         banner.font = 'Bangers'
         banner.padding.set(10, 16)
         banner.fontSize = 40
@@ -20,8 +20,8 @@ export default class extends Phaser.State {
         banner.smoothed = false
         banner.anchor.setTo(0.5)
 
-        this.game.world.setBounds(0, 0, 5000, 5000);
-        this.game.stage.backgroundColor = "#6F6F6F";
+        game.world.setBounds(0, 0, 5000, 5000);
+        game.stage.backgroundColor = "#001400";
 
         this.lapcount = 0;
         this.timer = 30;
@@ -83,7 +83,9 @@ export default class extends Phaser.State {
         });
 
         this.physics.startSystem(Phaser.Physics.P2JS);
-        this.game.add.existing(this.road);
+        game.roadCollisions = game.physics.p2.createCollisionGroup();
+
+        game.add.existing(this.road);
         this.road.initialize();
 
         this.mountain = new Mountain({
@@ -95,22 +97,22 @@ export default class extends Phaser.State {
         });
 
         this.roadtexture = new Phaser.Rope(this.game, 0, 0, 'roadtest', null, this.road.curvednodes)
-        this.game.add.existing(this.roadtexture);
+        game.add.existing(this.roadtexture);
 
-        this.game.add.existing(this.mountain);
+        game.add.existing(this.mountain);
 
-        this.game.add.existing(this.startline);
-        this.game.add.existing(this.midpoint);
+        game.add.existing(this.startline);
+        game.add.existing(this.midpoint);
 
-        this.game.add.existing(this.car);
+        game.add.existing(this.car);
         this.car.initialize();
 
         this.car.body.rotation = startpoint.a;
     }
 
     update () {
-        this.game.camera.x = this.car.x - game.width/2 || this.game.camera.x;
-        this.game.camera.y = this.car.y - game.height/2 || this.game.camera.y;
+        game.camera.x = this.car.x - game.width/2 || game.camera.x;
+        game.camera.y = this.car.y - game.height/2 || game.camera.y;
     }
 
     render () {
@@ -134,8 +136,8 @@ export default class extends Phaser.State {
             validy = p.y + ry;
 
         } while (
-            between(validx, this.game.camera.x - game.width/2, this.game.camera.x + game.width/2)
-         || between(validy, this.game.camera.y - game.height/2, this.game.camera.y + game.width/2)
+            between(validx, game.camera.x - game.width/2, game.camera.x + game.width/2)
+         || between(validy, game.camera.y - game.height/2, game.camera.y + game.width/2)
         );
 
         const items = [
@@ -152,6 +154,6 @@ export default class extends Phaser.State {
             y: validy + 530,
             asset: assetstr,
         })
-        this.game.add.existing(obstacle);
+        game.add.existing(obstacle);
     }
 }

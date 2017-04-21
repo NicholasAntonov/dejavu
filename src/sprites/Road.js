@@ -20,8 +20,9 @@ export default class extends Phaser.Sprite {
         this.anchor.set(0);
         this.body.clearShapes();
         this.generateRoadBoundaries();
-        var err = this.body.addPolygon({skipSimpleCheck: true, removeCollinearPoints: 0.1}, this.outline);
-        this.body.setCollisionGroup(this.game.physics.p2.nothingCollisionGroup);
+        this.body.addPolygon({skipSimpleCheck: true, removeCollinearPoints: 0.1}, this.outline);
+        this.body.setCollisionGroup(this.game.game.roadCollisions); // Two games PogChamp (don't know why)
+        this.body.collides(this.game.game.roadCollisions);
     }
 
     getXCoordinates () {
