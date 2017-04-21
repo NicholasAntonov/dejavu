@@ -13,3 +13,9 @@ export const increase = (number, amount) => {
     }
     return ret;
 }
+
+
+export const decrease = (number, amount) => {
+    const multiplier = number <= 0 ? -1 : 1;
+    return number - (multiplier * amount);
+}

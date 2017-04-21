@@ -1,5 +1,5 @@
 import Phaser from 'phaser'
-import { increase } from '../utils'
+import { increase, decrease } from '../utils'
 
 const SPACEBAR_KEYCODE = 32;
 
@@ -17,10 +17,11 @@ export default class extends Phaser.Sprite {
             // DRIFTIO
 
             if (this.cursors.up.isDown) {
-                this.body.angularAcceleration = increase(this.angularAcceleration, this.turningSpeed * (this.velocity/500));
+                // this.body.angularVelocity = increase(this.angularAcceleration, this.turningSpeed * (this.velocity/1000));
             } else if (this.cursors.down.isDown) {
-                this.body.angularAcceleration = increase(this.angularAcceleration, -1 * this.turningSpeed * (this.velocity/500));
+                // this.body.angularVelocity = decrease(this.angularAcceleration, this.turningSpeed * (this.velocity/1000));
             }
+            this.angularAcceleration = this.body.angularVelocity;
 
         } else {
             // sad normal driving
