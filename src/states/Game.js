@@ -4,6 +4,7 @@ import Car from '../sprites/Car'
 import Obstacle from '../sprites/Pickup'
 import Road from '../sprites/Road'
 import Checkpoint from '../sprites/Checkpoint'
+import Mountain from '../sprites/Mountain'
 
 export default class extends Phaser.State {
     init () {}
@@ -84,8 +85,18 @@ export default class extends Phaser.State {
         this.game.add.existing(this.road);
         this.road.initialize();
 
+        this.mountain = new Mountain({
+            game: this,
+            x: this.road.x,
+            y: this.road.y,
+            asset: null,
+            points: this.road.outline.slice(this.road.outline.length/2, this.road.outline.length),
+        });
+
         this.roadtexture = new Phaser.Rope(this.game, 0, 0, 'roadtest', null, this.road.curvednodes)
         this.game.add.existing(this.roadtexture);
+
+        this.game.add.existing(this.mountain);
 
         this.game.add.existing(this.startline);
         this.game.add.existing(this.midpoint);
