@@ -53,7 +53,6 @@ export default class extends Phaser.State {
                     this.startline.passes += 1;
                     this.startline.active = false;
                     this.midpoint.active = true;
-                    console.log("startline");
                 }
             }
         });
@@ -74,7 +73,6 @@ export default class extends Phaser.State {
                     this.midpoint.passes += 1;
                     this.midpoint.active = false;
                     this.startline.active = true;
-                    console.log("midpoint");
                 }
             }
         });
