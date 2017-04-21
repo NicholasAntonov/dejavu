@@ -47,6 +47,7 @@ export default class extends Phaser.Sprite {
             fallingcar.body.velocity.y = this.body.velocity.y;
             fallingcar.body.rotation = this.body.rotation;
             this.game.add.existing(fallingcar);
+            this.game.time.events.add(3000, this.game.endGame, this.game);
             this.destroy();
         }
 

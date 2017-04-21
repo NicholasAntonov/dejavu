@@ -80,7 +80,7 @@ export default class extends Phaser.State {
                     this.midpoint.passes += 1;
                     this.midpoint.active = false;
                     this.startline.active = true;
-                    this.timer += 18;
+                    this.timer += 10;
                     if (this.timer > 45) this.timer = 45;
                 }
             }
@@ -128,7 +128,7 @@ export default class extends Phaser.State {
         this.timer -= this.time.physicsElapsed;
         this.timertext.text = this.timer.toFixed(0);
         if (this.timer <= 0) {
-            //this.state.start('End');
+            this.state.start('End');
         }
     }
 
@@ -175,5 +175,9 @@ export default class extends Phaser.State {
             asset: assetstr,
         })
         game.add.existing(obstacle);
+    }
+
+    endGame () {
+        this.state.start('End');
     }
 }
