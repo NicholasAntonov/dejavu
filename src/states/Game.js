@@ -1,8 +1,8 @@
 /* globals __DEV__ */
 import Phaser from 'phaser'
-import Mushroom from '../sprites/Mushroom'
 import Car from '../sprites/Car'
 import Obstacle from '../sprites/Pickup'
+import Road from '../sprites/Road'
 
 export default class extends Phaser.State {
     init () {}
@@ -18,19 +18,21 @@ export default class extends Phaser.State {
         banner.smoothed = false
         banner.anchor.setTo(0.5)
 
-        game.world.setBounds(0, 0, 3000, 3000);
+        game.world.setBounds(0, 0, 5000, 5000);
 
-        this.mushroom = new Mushroom({
+        this.road = new Road({
             game: this,
             x: this.world.centerX,
             y: this.world.centerY,
-            asset: 'mushroom',
+            asset: null,
         });
+
+        var startpoint = this.road.getPointOnTrack(0);
 
         this.car = new Car({
             game: this,
-            x: this.world.centerX,
-            y: this.world.centerY,
+            x: startpoint.x,
+            y: startpoint.y,
             asset: 'car',
         });
 
@@ -41,12 +43,19 @@ export default class extends Phaser.State {
             asset: 'jetbox',
         });
 
-        this.physics.startSystem(Phaser.Physics.P2JS);
-        /* this.game.add.existing(this.mushroom);*/
-        this.game.add.existing(this.pakij);
 
+        this.physics.startSystem(Phaser.Physics.P2JS);
+        this.game.add.existing(this.road);
+        this.road.initialize();
+
+        this.road = new Phaser.Rope(this.game, 0, 0, 'roadtest', null, this.road.curvednodes)
+        this.game.add.existing(this.road);
+
+        this.game.add.existing(this.pakij);
         this.game.add.existing(this.car);
         this.car.initialize();
+
+        this.car.body.rotation = startpoint.a;
     }
 
     update () {
@@ -56,7 +65,7 @@ export default class extends Phaser.State {
 
     render () {
         if (__DEV__) {
-            this.game.debug.spriteInfo(this.car, 32, 32)
+            this.game.debug.spriteInfo(this.car, 32, 32);
         }
     }
 }
