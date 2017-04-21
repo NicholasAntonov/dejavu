@@ -12,11 +12,11 @@ export default class extends Phaser.State {
 
     create () {
         const bannerText = 'DejaVu'
-        let banner = this.add.text(this.world.centerX, game.height - 80, bannerText)
-        banner.font = 'Bangers'
+        let banner = this.add.text(1000, 2200, bannerText)
+        banner.font = 'Dejavu Sans'
         banner.padding.set(10, 16)
         banner.fontSize = 40
-        banner.fill = '#77BFA3'
+        banner.fill = '#FFFFFF'
         banner.smoothed = false
         banner.anchor.setTo(0.5)
 
@@ -24,7 +24,7 @@ export default class extends Phaser.State {
         game.stage.backgroundColor = "#001400";
 
         this.lapcount = 0;
-        this.timer = 30;
+        this.timer = 12;
 
         this.road = new Road({
             game: this,
@@ -58,6 +58,8 @@ export default class extends Phaser.State {
                     this.startline.active = false;
                     this.midpoint.active = true;
                     this.lapcount += 1;
+                    this.timer += 18;
+                    if (this.timer > 45) this.timer = 45;
                 }
             }
         });
@@ -78,6 +80,8 @@ export default class extends Phaser.State {
                     this.midpoint.passes += 1;
                     this.midpoint.active = false;
                     this.startline.active = true;
+                    this.timer += 18;
+                    if (this.timer > 45) this.timer = 45;
                 }
             }
         });
@@ -108,16 +112,31 @@ export default class extends Phaser.State {
         this.car.initialize();
 
         this.car.body.rotation = startpoint.a;
+
+        this.timertext = game.add.text(200, 500, "test");
+        this.timertext.font = 'Dejavu Sans';
+        this.timertext.fontsize = 70;
+        this.timertext.fill = '#FFFFFF';
+        this.timertext.anchor.setTo(0.5);
+        this.timertext.fixedToCamera = true;
+        this.timertext.cameraOffset.setTo(this.game.width/2, 50);
     }
 
     update () {
         game.camera.x = this.car.x - game.width/2 || game.camera.x;
         game.camera.y = this.car.y - game.height/2 || game.camera.y;
+        this.timer -= this.time.physicsElapsed;
+        this.timertext.text = this.timer.toFixed(0);
+        if (this.timer <= 0) {
+            //this.state.start('End');
+        }
     }
 
     render () {
         if (__DEV__) {
-            //this.game.debug.spriteInfo(this.car, 32, 32);
+            if (this.car) {
+                //this.game.debug.spriteInfo(this.car, 32, 32);
+            }
         }
     }
 
@@ -143,6 +162,7 @@ export default class extends Phaser.State {
         const items = [
             'pakij',
             'jetbox',
+            'ball',
         ]
         var assetstr = items[Math.floor(Math.random()*items.length)];
         
