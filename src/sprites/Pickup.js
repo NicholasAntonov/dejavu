@@ -14,13 +14,13 @@ export default class extends Phaser.Sprite {
     }
 
     update () {
-        var bodies = this.game.physics.p2.hitTest(this.position, [this.game.road.body]);
+        /*var bodies = this.game.physics.p2.hitTest(this.position, [this.game.road.body]);
         if (bodies.length === 0) {
             this.scale.setTo(this.scale.x-0.01, this.scale.y-0.01);
             if (this.scale.x < 0.05) {
                 this.destroy();
             }
-        }
+        }*/
     }
 
     onBeginContact() {
